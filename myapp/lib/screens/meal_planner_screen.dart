@@ -48,18 +48,21 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                       _buildPlanGenerator(),
                       if (mealPlanProvider.currentPlan != null) ...[
                         const SizedBox(height: 24),
-                        _buildMealSection(
-                          'Breakfast',
-                          mealPlanProvider.currentPlan!.breakfast,
-                        ),
-                        _buildMealSection(
-                          'Lunch',
-                          mealPlanProvider.currentPlan!.lunch,
-                        ),
-                        _buildMealSection(
-                          'Dinner',
-                          mealPlanProvider.currentPlan!.dinner,
-                        ),
+                        if (mealPlanProvider.currentPlan!.breakfast.isNotEmpty)
+                          _buildMealSection(
+                            'Breakfast',
+                            mealPlanProvider.currentPlan!.breakfast,
+                          ),
+                        if (mealPlanProvider.currentPlan!.lunch.isNotEmpty)
+                          _buildMealSection(
+                            'Lunch',
+                            mealPlanProvider.currentPlan!.lunch,
+                          ),
+                        if (mealPlanProvider.currentPlan!.dinner.isNotEmpty)
+                          _buildMealSection(
+                            'Dinner',
+                            mealPlanProvider.currentPlan!.dinner,
+                          ),
                         if (mealPlanProvider.currentPlan!.snacks.isNotEmpty)
                           _buildMealSection(
                             'Snacks',
@@ -69,6 +72,8 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
                         _buildNutritionSummary(
                           mealPlanProvider.currentPlan!.dailyNutrition,
                         ),
+                      ] else ...[
+                        const Center(child: Text('No meal plan generated yet')),
                       ],
                     ],
                   ),
@@ -132,7 +137,8 @@ class _MealPlannerScreenState extends State<MealPlannerScreen> {
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 8),
-        ...meals.map((meal) => MealCard(meal: meal)).toList(),
+        if (meals.isNotEmpty)
+          ...meals.map((meal) => MealCard(meal: meal)).toList(),
         const SizedBox(height: 16),
       ],
     );

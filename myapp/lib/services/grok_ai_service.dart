@@ -1,13 +1,12 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GroqAIService {
   static String get _baseUrl => 'https://api.groq.com/openai/v1';
-  static String get _apiKey => dotenv.env['GROQ_API_KEY'] ?? '';
-  static String get _modelName =>
-      dotenv.env['GROQ_MODEL_NAME'] ?? 'deepseek-r1-distill-llama-70b';
+  static String get _apiKey =>
+      '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'; // <-- Replace with your actual key
+  static String get _modelName => 'deepseek-r1-distill-llama-70b';
 
   Future<Map<String, dynamic>> generateMealPlan({
     required double targetCalories,
@@ -44,9 +43,20 @@ class GroqAIService {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        // Groq returns content inside choices[0].message.content
+
+        // Ensure the response contains 'choices' and 'message' before accessing
+        if (responseData['choices'] == null ||
+            responseData['choices'].isEmpty) {
+          throw Exception('Invalid API response: No choices found.');
+        }
         final mealPlanJson =
             jsonDecode(responseData['choices'][0]['message']['content']);
+
+        // Ensure the decoded meal plan is not null or empty
+        if (mealPlanJson == null || mealPlanJson.isEmpty) {
+          throw Exception('Invalid API response: Meal plan data is empty.');
+        }
+
         return mealPlanJson;
       } else {
         throw Exception(
@@ -91,8 +101,22 @@ class GroqAIService {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+
+        // Ensure the response contains 'choices' and 'message' before accessing
+        if (responseData['choices'] == null ||
+            responseData['choices'].isEmpty) {
+          throw Exception('Invalid API response: No choices found.');
+        }
+
         final analysisJson =
             jsonDecode(responseData['choices'][0]['message']['content']);
+
+        // Ensure the decoded analysis is not null or empty
+        if (analysisJson == null || analysisJson.isEmpty) {
+          throw Exception(
+              'Invalid API response: Image analysis data is empty.');
+        }
+
         return analysisJson;
       } else {
         throw Exception(
