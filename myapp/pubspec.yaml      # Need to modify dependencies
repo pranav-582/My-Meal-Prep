@@ -1,0 +1,11 @@
+name: my_project_name
+description: A new Flutter project
+dependencies:
+  flutter:
+    sdk: flutter
+  my_project_name: ^1.0.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true
