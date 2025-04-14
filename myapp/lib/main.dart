@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'services/notification_service.dart';
 import 'providers/meal_plan_provider.dart';
 import 'health_screen.dart';
@@ -13,8 +12,6 @@ void main() async {
 
   final notificationService = NotificationService();
   await notificationService.initialize();
-
-  await dotenv.load(fileName: ".env");
 
   runApp(const MyApp());
 }
